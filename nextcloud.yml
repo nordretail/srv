@@ -33,3 +33,39 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
       - NEXTCLOUD_HOSTNAME=cloud.nord.ru
+
+version: '3.1'
+
+services:
+
+  mysql:
+    image: mysql:5.7.32
+    container_name: mysql_nextcloud
+    volumes:
+      - /sharedock/mysql_nextcloud/:/var/lib/mysql/
+    ports:
+      - 3307:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Lbvtnhf7373
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+      MYSQL_ROOT_HOST: '%'
+  nextcloud:
+    image: nextcloud
+    container_name: oxidized
+    ports:
+      - 8080:80
+    volumes:
+      - /sharedock/mysql_nextcloud/:/var/www/html/data
+      - /var/www/html/data:/var/www/html/data
+      - /var/www/html:/var/www/html
+      - /var/www/nextcloud/apps:/var/www/nextcloud/apps
+      - /var/www/html/config:/var/www/html/config
+    environment:
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+
+    restart: always
